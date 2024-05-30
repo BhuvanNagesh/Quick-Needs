@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .search-box {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .search-button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        .order-categories {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .order-category {
+            padding: 10px 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+        }
+        .order-category.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .order-category:hover {
+            background-color: #e9ecef;
+        }
+        .order-category.active:hover {
+            background-color: #0056b3;
+        }
+        #orderResults {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <input type="text" class="search-box" id="orderSearch" placeholder="Search your orders...">
+        <button class="search-button" onclick="searchOrders()">Search</button>
+    </div>
+    <div class="order-categories">
+        <div class="order-category" onclick="filterOrders(this, 'cancelled')">Cancelled Orders</div>
+        <div class="order-category" onclick="filterOrders(this, 'recent')">Recent Orders</div>
+        <div class="order-category" onclick="filterOrders(this, 'buy-again')">Buy Again</div>
+        <div class="order-category" onclick="filterOrders(this, 'not-shipped')">Not Yet Shipped</div>
+    </div>
+    <div id="orderResults">No orders yet</div>
+    <script>
+        function searchOrders() {
+            const query = document.getElementById('orderSearch').value;
+            if (query) {
+                console.log('Searching for:', query);
+                // Perform the search logic here, e.g., making an API call to get orders
+                // Display the results in the orderResults div
+                document.getElementById('orderResults').textContent = 'No orders yet'; // Replace with actual search results
+            }
+        }
+
+        function filterOrders(element, category) {
+            // Remove active class from all categories
+            const categories = document.querySelectorAll('.order-category');
+            categories.forEach(cat => cat.classList.remove('active'));
+
+            // Add active class to the clicked category
+            element.classList.add('active');
+
+            console.log('Filtering by category:', category);
+            // Perform the filter logic here, e.g., making an API call to get filtered orders
+            // Display the results in the orderResults div
+            document.getElementById('orderResults').textContent = 'No orders yet'; // Replace with actual filter results
+        }
+    </script>
+</body>
+</html>

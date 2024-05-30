@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: url('https://shorturl.at/R7Iuo') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: black;
+    }
+
+     #overlay {
+      position: absolute;
+      display:flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: flex-start;
+      margin-bottom:350px;
+    }
+
+    .container {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0);
+      background: rgba(255, 255, 255, 0);
+      max-width: 90%;
+      margin-left: 50px;
+    }
+
+    h1 {
+      color: rgb(60, 20, 20);
+      font-size: 100px;
+      margin-bottom: 10px;
+    }
+
+    h4 {
+      color: black;
+      font-size: 24px;
+      margin-bottom: 10px;
+      margin-top: 0;
+    }
+
+    h2 {
+      color: black;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .login-button,
+    .register {
+      background-color: #04AA6D;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    .form-inline,
+    .form-inline1 {
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 60px;
+      }
+
+      h4 {
+        font-size: 20px;
+      }
+
+      h2 {
+        font-size: 16px;
+      }
+
+      .login-button,
+      .register {
+        font-size: 14px;
+        padding: 8px 16px;
+        margin: 5px 0;
+      }
+
+      .container {
+        padding: 20px 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="overlay">
+    <img src="qlogo1.png" alt="logoimage">
+  </div>
+  <div class="container">
+    <h1>QUICK NEEDS</h1>
+    <h4>Shop Local, Deliver Quick!</h4>
+    <h2>Choose your login type:</h2>
+    <form class="form-inline" action="LoginCustomer.html">
+      <button class="login-button">Customer Login</button>
+    </form>
+    <form class="form-inline" action="LoginVendor.html">
+      <button class="login-button">Vendor Login</button>
+    </form>
+    <div>
+      <form class="form-inline1" action="Vendorregistration.html">
+        <button class="register">Register Vendor</button>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>

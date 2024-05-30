@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 50px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        .profile-section, .bank-section, .qr-section {
+            margin-bottom: 20px;
+        }
+        .profile-section img, .qr-section img {
+            display: block;
+            margin: 0 auto;
+            border-radius: 50%;
+            margin-left: auto;
+        }
+        .profile-section h2, .profile-section p {
+            text-align: center;
+        }
+        .bank-details, .edit-bank-details {
+            display: none;
+            margin-top: 10px;
+        }
+        .bank-section h3 {
+            margin-bottom: 10px;
+        }
+        .qr-section {
+            text-align: center;
+        }
+        .edit-qr-code {
+            display: none;
+            margin-top: 10px;
+        }
+        .button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .bank-section{
+            text-align: center;
+        }
+        .qr-code{
+            text-align: center;
+        }
+        .heading{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="heading">Payment Details</h1>
+    <div class="profile-section">
+        <img src="default-profile.png" alt="Vendor Profile Pic" width="100" height="100">
+        <h2>Vendor Name</h2>
+        <p>Shop Name</p>
+        <p>Shop Address</p>
+    </div>
+    <div class="bank-section">
+        <h3>Bank Details</h3>
+        <div class="bank-details">
+            <p>Bank Name: XYZ Bank</p>
+            <p>Account Number: 123456789</p>
+            <p>IFSC Code: XYZ12345</p>
+        </div>
+        <div class="edit-bank-details">
+            <input type="text" placeholder="Bank Name" value="XYZ Bank"><br>
+            <input type="text" placeholder="Account Number" value="123456789"><br>
+            <input type="text" placeholder="IFSC Code" value="XYZ12345"><br>
+            <button class="button" onclick="saveBankDetails()">Save Bank Details</button>
+        </div>
+        <button class="button" onclick="toggleEditBankDetails()">Edit Bank Details</button>
+    </div>
+    <div class="qr-code">
+        <h3>Vendor QR Code</h3>
+        
+        <img src="https://cdn.britannica.com/17/155017-050-9AC96FC8/Example-QR-code.jpg"height="200" width="200" alt="Vendor QR Code"> 
+        <div class="edit-qr-code">
+            <input type="file" id="newQRCode"><br>
+            <button class="button" onclick="submitQRCode()">Submit QR Code</button>
+        </div>
+        <button class="button" onclick="toggleEditQRCode()">Change QR Code</button>
+    </div>
+</div>
+
+<script>
+    function toggleEditBankDetails() {
+        const bankDetails = document.querySelector('.bank-details');
+        const editBankDetails = document.querySelector('.edit-bank-details');
+        if (editBankDetails.style.display === 'none' || editBankDetails.style.display === '') {
+            editBankDetails.style.display = 'block';
+            bankDetails.style.display = 'none';
+        } else {
+            editBankDetails.style.display = 'none';
+            bankDetails.style.display = 'block';
+        }
+    }
+
+    function saveBankDetails() {
+        // Add logic to save bank details
+        toggleEditBankDetails();
+    }
+
+    
+    function toggleEditQRCode() {
+        const editQRCode = document.querySelector('.edit-qr-code');
+        if (editQRCode.style.display === 'none' || editQRCode.style.display === '') {
+            editQRCode.style.display = 'block';
+        } else {
+            editQRCode.style.display = 'none';
+        }
+    }
+
+    function submitQRCode() {
+        const newQRCode = document.getElementById('newQRCode').files[0];
+        if (newQRCode) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const qrCodeImg = document.querySelector('.qr-code img');
+                
+                qrCodeImg.src = e.target.result;
+            }
+            reader.readAsDataURL(newQRCode);
+        }
+        toggleEditQRCode();
+    }
+</script>
+
+</body>
+</html>

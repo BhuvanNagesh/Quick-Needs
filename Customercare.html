@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Care</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #04AA6D;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Contact Customer Care</h1>
+        <form id="customerCareForm">
+            <input type="text" id="customerName" placeholder="Your Name">
+            <input type="text" id="customerEmail" placeholder="Your Email">
+            <textarea id="customerIssue" placeholder="Describe Your Issue"></textarea>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('customerCareForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Get customer details
+            var customerName = document.getElementById('customerName').value;
+            var customerEmail = document.getElementById('customerEmail').value;
+            var customerIssue = document.getElementById('customerIssue').value;
+
+            // Display customer details to the vendor
+            alert('Customer Name: ' + customerName + '\nCustomer Email: ' + customerEmail + '\nCustomer Issue: ' + customerIssue);
+
+            // You can send this data to the vendor through AJAX or any other method
+            // For demonstration, we're just displaying it in an alert
+        });
+    </script>
+</body>
+</html>

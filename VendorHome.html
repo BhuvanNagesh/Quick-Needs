@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocery Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .navbar .menu-container {
+            position: relative;
+            margin-left: auto;
+            cursor: pointer;
+        }
+        .navbar .menu-icon {
+            font-size: 24px;
+        }
+        .navbar .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            right: 0;
+            background-color: white;
+            color: black;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .navbar .dropdown-menu a {
+            display: block;
+            padding: 10px;
+            width: 150px;
+            text-decoration: none;
+            color: #333;
+        }
+        .navbar .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+        }
+        .search-box {
+            width: 70%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .search-button, .mic-button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        .mic-button {
+            background-color: #007bff;
+        }
+        .item-actions {
+            padding: 20px;
+        }
+        .item-actions button {
+            padding: 10px 20px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #17a2b8;
+            color: white;
+            cursor: pointer;
+        }
+        .item-list {
+            padding: 20px;
+        }
+        .item {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .item img {
+            max-width: 50px;
+            margin-right: 20px;
+        }
+        .item-details {
+            flex-grow: 1;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h2 {
+            margin: 0;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-body {
+            margin-top: 10px;
+        }
+        .modal-body input[type="text"], .modal-body input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .modal-footer {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .modal-footer button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .save-button {
+            background-color: #28a745;
+            color: white;
+        }
+        .cancel-button {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-icon">🛒 Grocery App</div>
+    <div class="menu-container">
+        <div class="menu-icon" onclick="toggleDropdown()">☰</div>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="Vendordetails.html">Account Details</a>
+            <a href="Orderdetails.html">Orders</a>
+            <a href="Vendorpaymentdetails.html">Payment Details</a>
+            <a href="Vendortransactionhistory.html">Transaction History</a>
+            <a href="Vendorcustomer.html">Customer</a>
+            <a href="Customergrievance.html">Customer Grievance</a>
+        </div>
+    </div>
+</nav>
+
+<div class="search-container">
+    <input type="text" class="search-box" id="searchInput" placeholder="Enter groceries...">
+    <button class="search-button" onclick="searchGroceries()">Search</button>
+    <button class="mic-button" onclick="startRecognition()">🎤</button>
+</div>
+
+<div class="item-actions">
+    <button onclick="openAddItemModal()">Add Item</button>
+    <button onclick="openDeleteItemModal()">Delete Item</button>
+</div>
+
+<div class="item-list" id="itemList">
+    <!-- Items will be added here -->
+</div>
+
+<!-- Add Item Modal -->
+<div id="addItemModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Add Item</h2>
+            <span class="close" onclick="closeAddItemModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <input type="file" id="itemImage" accept="image/*">
+            <input type="text" id="itemName" placeholder="Item Name">
+            <input type="text" id="itemPrice" placeholder="Item Price">
+        </div>
+        <div class="modal-footer">
+            <button class="save-button" onclick="saveItem()">Save</button>
+            <button class="cancel-button" onclick="closeAddItemModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Item Modal -->
+<div id="deleteItemModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Delete Item</h2>
+            <span class="close" onclick="closeDeleteItemModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <input type="text" id="deleteItemName" placeholder="Enter Item Name">
+        </div>
+        <div class="modal-footer">
+            <button class="save-button" onclick="deleteItem()">Delete</button>
+            <button class="cancel-button" onclick="closeDeleteItemModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleDropdown() {
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function searchGroceries() {
+        const query = document.getElementById('searchInput').value;
+        if (query) {
+            console.log('Searching for:', query);
+            // Perform the search logic here, e.g., making an API call
+        }
+    }
+
+    function startRecognition() {
+        if (!('webkitSpeechRecognition' in window)) {
+            alert('Your browser does not support speech recognition. Please use Chrome.');
+            return;
+        }
+
+        const recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.onstart = () => {
+            console.log('Voice recognition started. Speak into the microphone.');
+        };
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            document.getElementById('searchInput').value = transcript;
+            searchGroceries();
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+        };
+
+        recognition.onend = () => {
+            console.log('Voice recognition ended.');
+        };
+
+        recognition.start();
+    }
+
+    function openAddItemModal() {
+        document.getElementById('addItemModal').style.display = 'block';
+    }
+
+    function closeAddItemModal() {
+        document.getElementById('addItemModal').style.display = 'none';
+    }
+
+    function saveItem() {
+        const itemImage = document.getElementById('itemImage').files[0];
+        const itemName = document.getElementById('itemName').value;
+        const itemPrice = document.getElementById('itemPrice').value;
+
+        if (itemImage && itemName && itemPrice) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const itemList = document.getElementById('itemList');
+                const newItem = document.createElement('div');
+                newItem.classList.add('item');
+                newItem.innerHTML = `
+                    <img src="${e.target.result}" alt="Item Image">
+                    <div class="item-details">
+                        <h3>${itemName}</h3>
+                        <p>Price: $${itemPrice}</p>
+                    </div>
+                `;
+                itemList.appendChild(newItem);
+            };
+            reader.readAsDataURL(itemImage);
+            closeAddItemModal();
+        } else {
+            alert('Please fill out all fields.');
+        }
+    }
+
+    function openDeleteItemModal() {
+        document.getElementById('deleteItemModal').style.display = 'block';
+    }
+
+    function closeDeleteItemModal() {
+        document.getElementById('deleteItemModal').style.display = 'none';
+    }
+
+    function deleteItem() {
+        const deleteItemName = document.getElementById('deleteItemName').value.toLowerCase();
+        const itemList = document.getElementById('itemList');
+        const items = itemList.getElementsByClassName('item');
+        let itemFound = false;
+
+        for (let i = 0; i < items.length; i++) {
+            const itemName = items[i].getElementsByClassName('item-details')[0].getElementsByTagName('h3')[0].innerText.toLowerCase();
+            if (itemName === deleteItemName) {
+                itemList.removeChild(items[i]);
+                itemFound = true;
+                break;
+            }
+        }
+
+        if (!itemFound) {
+            alert('Item not found.');
+        }
+
+        closeDeleteItemModal();
+    }
+
+    window.onclick = function(event) {
+        if (event.target === document.getElementById('addItemModal')) {
+            closeAddItemModal();
+        }
+        if (event.target === document.getElementById('deleteItemModal')) {
+            closeDeleteItemModal();
+        }
+        if (!event.target.matches('.menu-icon')) {
+            const dropdowns = document.getElementsByClassName('dropdown-menu');
+            for (let i = 0; i < dropdowns.length; i++) {
+                const openDropdown = dropdowns[i];
+                if (openDropdown.style.display === 'block') {
+                    openDropdown.style.display = 'none';
+                }
+            }
+        }
+    };
+</script>
+
+</body>
+</html>

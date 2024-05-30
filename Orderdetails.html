@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .navbar .menu-container {
+            position: relative;
+            margin-left: auto;
+            cursor: pointer;
+        }
+        .navbar .menu-icon {
+            font-size: 24px;
+        }
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #007bff;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #000000;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidebar a:hover {
+            color: hsl(0, 0%, 100%);
+        }
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+        #main {
+            transition: margin-left .5s;
+            padding: 16px;
+        }
+        .order-content {
+            display: none;
+        }
+        .order-content.active {
+            display: block;
+        }
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .order-item button {
+            padding: 5px 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-icon">🛒 Grocery App</div>
+    <div class="menu-container">
+        <div class="menu-icon" onclick="openNav()">☰</div>
+    </div>
+</nav>
+
+<div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="#" onclick="showPendingOrders()">Customer Details</a>
+    <a href="#" onclick="showOrderHistory()">Customer Time Slots</a>
+</div>
+
+<div id="main">
+    <h1>Order Details</h1>
+    <div class="order-content" id="pendingOrders">
+        <h3>Pending Orders</h3>
+        <div id="pendingOrderList">
+            <p>No pending orders.</p>
+        </div>
+    </div>
+    <div class="order-content" id="orderHistory">
+        <h3>Order History</h3>
+        <div id="orderHistoryList">
+            <p>No order history available.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const pendingOrders = [];
+    const orderHistory = [];
+
+    function openNav() {
+        document.getElementById("mySidebar").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidebar").style.width = "0";
+        document.getElementById("main").style.marginLeft = "0";
+    }
+
+    function showPendingOrders() {
+        document.getElementById('pendingOrders').classList.add('active');
+        document.getElementById('orderHistory').classList.remove('active');
+        displayPendingOrders();
+    }
+
+    function showOrderHistory() {
+        document.getElementById('pendingOrders').classList.remove('active');
+        document.getElementById('orderHistory').classList.add('active');
+        displayOrderHistory();
+    }
+
+    function displayPendingOrders() {
+        const pendingOrderList = document.getElementById('pendingOrderList');
+        pendingOrderList.innerHTML = '';
+
+        if (pendingOrders.length === 0) {
+            pendingOrderList.innerHTML = '<p>No pending orders.</p>';
+        } else {
+            pendingOrders.forEach((order, index) => {
+                const orderItem = document.createElement('div');
+                orderItem.className = 'order-item';
+                orderItem.innerHTML = `
+                    <span>Order ${index + 1}: ${order}</span>
+                    <button onclick="markAsDone(${index})">Done</button>
+                `;
+                pendingOrderList.appendChild(orderItem);
+            });
+        }
+    }
+
+    function displayOrderHistory() {
+        const orderHistoryList = document.getElementById('orderHistoryList');
+        orderHistoryList.innerHTML = '';
+
+        if (orderHistory.length === 0) {
+            orderHistoryList.innerHTML = '<p>No order history available.</p>';
+        } else {
+            orderHistory.forEach((order, index) => {
+                const orderItem = document.createElement('div');
+                orderItem.className = 'order-item';
+                orderItem.innerHTML = `<span>Order ${index + 1}: ${order}</span>`;
+                orderHistoryList.appendChild(orderItem);
+            });
+        }
+    }
+
+    function markAsDone(index) {
+        const order = pendingOrders.splice(index, 1)[0];
+        orderHistory.push(order);
+        displayPendingOrders();
+        displayOrderHistory();
+    }
+
+    // Adding some sample orders for demonstration
+    pendingOrders.push('Groceries - Order #1');
+    pendingOrders.push('Groceries - Order #2');
+    displayPendingOrders();
+</script>
+
+</body>
+</html>

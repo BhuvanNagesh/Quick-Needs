@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .main {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 300px;
+        }
+        .main h2 {
+            color: #4caf50;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        input[type="file"],
+        input[type="text"],
+        input[type="url"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button[type="submit"] {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: none;
+            background-color: #4caf50;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        .form-group-profile-pic {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .profile-pic {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .profile-pic img {
+            max-width: 150px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+        .profile-pic input[type="file"] {
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <h2>Shop Registration</h2>
+        <form action="\action">
+            <label for="profilePic">Shop Image:</label>
+            <input type="file" id="profilePic" name="Shop Image" accept="image/*">
+            
+            <label for="shopName">Shop Name:</label>
+            <input type="text" id="shopName" name="shopName" placeholder="Enter Shop Name" required>
+            
+            <label for="shopAddress">Shop Address:</label>
+            <input type="text" id="shopAddress" name="shopAddress" placeholder="Enter Shop Address" required>
+            <div id="map" style="height: 300px; width: 100%;">
+                <!-- Map will be displayed here -->
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('profile-pic-upload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profile-pic').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+    <script>
+        // Initialize and display the map
+        function initMap() {
+            // Define customer location
+            var customerLocation = { lat: 40.7128, lng: -74.0060 }; // Example coordinates (New York)
+
+            // Create a map centered at the customer location
+            var map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 12,
+                center: customerLocation,
+            });
+
+            // Add a marker at the customer location
+            var marker = new google.maps.Marker({
+                position: customerLocation,
+                map: map,
+                title: "Customer Location",
+            });
+        }
+    </script>
+    <!-- Load the Google Maps API with your API key -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjdOklcLXZ5tSXQIJkvDAjA0KAEoLPVHI&callback=initMap" async defer></script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .search-box {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .search-button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        .order {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .order:last-child {
+            border-bottom: none;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .order-header h2 {
+            font-size: 18px;
+            margin: 0;
+        }
+        .order-header .order-date {
+            font-size: 14px;
+            color: #666;
+        }
+        .order-items {
+            margin-bottom: 10px;
+        }
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        .order-item .item-name {
+            font-size: 16px;
+            color: #333;
+        }
+        .order-item .item-price {
+            font-size: 16px;
+            color: #333;
+        }
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .total-amount-spent {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Payment Details</div>
+        <div class="search-container">
+            <input type="text" class="search-box" id="orderSearch" placeholder="Search your orders...">
+            <button class="search-button" onclick="searchOrders()">Search</button>
+        </div>
+        <div id="ordersContainer">
+            <div class="order" data-total="9.50">
+                <div class="order-header">
+                    <h2>Order #12345</h2>
+                    <span class="order-date">March 15, 2024</span>
+                </div>
+                <div class="order-items">
+                    <div class="order-item">
+                        <span class="item-name">Apple - 1 kg</span>
+                        <span class="item-price">$3.00</span>
+                    </div>
+                    <div class="order-item">
+                        <span class="item-name">Banana - 2 kg</span>
+                        <span class="item-price">$4.00</span>
+                    </div>
+                    <div class="order-item">
+                        <span class="item-name">Milk - 1 liter</span>
+                        <span class="item-price">$2.50</span>
+                    </div>
+                </div>
+                <div class="order-total">
+                    <span>Total</span>
+                    <span>$9.50</span>
+                </div>
+            </div>
+    
+            <div class="order" data-total="6.50">
+                <div class="order-header">
+                    <h2>Order #12346</h2>
+                    <span class="order-date">March 18, 2024</span>
+                </div>
+                <div class="order-items">
+                    <div class="order-item">
+                        <span class="item-name">Bread - 1 loaf</span>
+                        <span class="item-price">$1.50</span>
+                    </div>
+                    <div class="order-item">
+                        <span class="item-name">Butter - 200g</span>
+                        <span class="item-price">$2.00</span>
+                    </div>
+                    <div class="order-item">
+                        <span class="item-name">Eggs - 12 pcs</span>
+                        <span class="item-price">$3.00</span>
+                    </div>
+                </div>
+                <div class="order-total">
+                    <span>Total</span>
+                    <span>$6.50</span>
+                </div>
+            </div>
+        </div>
+        <div id="totalAmountSpent" class="total-amount-spent">Total Amount Spent: $16.00</div>
+    </div>
+    <script>
+        function searchOrders() {
+            const query = document.getElementById('orderSearch').value;
+            if (query) {
+                console.log('Searching for:', query);
+                // Perform the search logic here, e.g., making an API call to get orders
+                // Display the results in the ordersContainer div
+                document.getElementById('ordersContainer').textContent = 'No orders yet'; // Replace with actual search results
+            }
+        }
+
+        function calculateTotalAmountSpent() {
+            const orders = document.querySelectorAll('.order');
+            let totalAmount = 0;
+            orders.forEach(order => {
+                totalAmount += parseFloat(order.getAttribute('data-total'));
+            });
+            document.getElementById('totalAmountSpent').textContent = 'Total Amount Spent: $' + totalAmount.toFixed(2);
+        }
+
+        // Call the function to calculate total amount spent on page load
+        window.onload = calculateTotalAmountSpent;
+    </script>
+</body>
+</html>

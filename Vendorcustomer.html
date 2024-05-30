@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .navbar .search-container {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            margin-left: 20px;
+        }
+        .navbar input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+        }
+        .navbar .search-container button {
+            padding: 8px 12px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        .navbar .menu-container {
+            cursor: pointer;
+            font-size: 24px;
+        }
+        .sidebar {
+            height: 100vh;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+        }
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+        .main-content {
+            margin-top: 50px;
+            margin-left: 260px;
+            padding: 20px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        h2 {
+            color: #007bff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .form-group button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .message {
+            padding: 10px;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .new-customer-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .new-customer-form h2 {
+            text-align: center;
+        }
+        .new-customer-form label {
+            display: block;
+            margin-top: 10px;
+        }
+        .new-customer-form input, .new-customer-form select, .new-customer-form button {
+            width: calc(100% - 20px);
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius:5px;
+        }
+        .new-customer-form button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .new-customer-form button:hover {
+            background-color: #218838;
+        }
+        #map {
+            height: 300px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="menu-container" onclick="toggleSidebar()">☰</div>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search...">
+        <button class="search-button" onclick="searchCustomer()">Search</button>
+        <button class="mic-button">🎤</button>
+    </div>
+</nav>
+
+<div class="sidebar" id="mySidebar">
+    <a href="#" onclick="showSection('customerDetails')">Customer Details</a>
+    <a href="#" onclick="showSection('customerTimeslots')">Customer Timeslots</a>
+    <a href="#" onclick="showSection('addTimeslots')">Add Timeslots</a>
+</div>
+
+<div class="main-content">
+    <div class="content-section" id="customerDetails">
+        <h2>Customer Details</h2>
+        <table id="customerTable">
+            <thead>
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Existing customer rows -->
+            </tbody>
+        </table>
+        <!-- Registration Form -->
+        <div class="new-customer-form">
+            <h2>Register New Customer</h2>
+            <form id="newCustomerForm" onsubmit="registerCustomer(event)">
+                <label for="first">First Name:</label>
+                <input type="text" id="first" name="first" required>
+                
+                <label for="last">Last Name:</label>
+                <input type="text" id="last" name="last" required>
+                
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                
+                <label for="repassword">Re-type Password:</label>
+                <input type="password" id="repassword" name="repassword" required>
+                
+                <label for="mobile">Contact:</label>
+                <input type="text" id="mobile" name="mobile" maxlength="10" required>
+                
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+                
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" required>
+                
+                <div id="map"></div>
+                
+                <button type="submit">Add Customer</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="content-section" id="customerTimeslots">
+        <h2>Customer Timeslots</h2>
+        <table id="timeslotTable">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer Name</th>
+                    <th>Address</th>
+                    <th>Time Slot</th>
+                    <th>Map</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Timeslot rows -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content-section" id="addTimeslots">
+        <h2>Add Timeslots</h2>
+        <div class="form-group">
+            <label for="customerName">Customer Name</label>
+            <input type="text" id="customerName" placeholder="Enter customer name">
+        </div>
+        <div class="form-group">
+            <label for="customerAddress">Customer Address</label>
+            <input type="text" id="customerAddress" placeholder="Enter customer address">
+        </div>
+        <div class="form-group">
+            <label for="timeSlot">Time Slot</label>
+            <input type="text" id="timeSlot" placeholder="Enter time slot (e.g., 10:00 AM - 12:00 PM)">
+        </div>
+        <div class="form-group">
+            <button onclick="addTimeslot()">Add Timeslot</button>
+        </div>
+    </div>
+
+    <div id="message" class="message" style="display: none;"></div>
+</div>
+
+<script>
+    const timeslots = [];
+    const customers = [
+        { name: 'John Doe', address: '123 Main St, Springfield' },
+        { name: 'Jane Smith', address: '456 Oak Ave, Springfield' },
+        { name: 'Mike Johnson', address: '789 Pine Rd, Springfield' },
+        { name: 'Emily Davis', address: '101 Maple St, Springfield' }
+    ];
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('mySidebar');
+        const mainContent = document.querySelector('.main-content');
+        if (sidebar.style.width === '250px') {
+            sidebar.style.width = '0';
+            mainContent.style.marginLeft = '0';
+        } else {
+            sidebar.style.width = '250px';
+            mainContent.style.marginLeft = '250px';
+        }
+    }
+
+    function showSection(sectionId) {
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
+        });
+        document.getElementById(sectionId).classList.add('active');
+    }
+
+    function searchCustomer() {
+        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+        const customerTable = document.getElementById('customerTable').getElementsByTagName('tbody')[0];
+        const rows = customerTable.getElementsByTagName('tr');
+
+        let found = false;
+        for (let i = 0; i < rows.length; i++) {
+            const nameCell = rows[i].getElementsByTagName('td')[0];
+            if (nameCell) {
+                const name = nameCell.textContent || nameCell.innerText;
+                if (name.toLowerCase().indexOf(searchInput) > -1) {
+                    rows[i].style.display = '';
+                    found = true;
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
+        }
+
+        const message = document.getElementById('message');
+        if (found) {
+            message.style.display = 'none';
+        } else {
+            message.textContent = 'Invalid search';
+            message.style.display = 'block';
+        }
+    }
+
+    function addTimeslot() {
+        const customerName = document.getElementById('customerName').value;
+        const customerAddress = document.getElementById('customerAddress').value;
+        const timeSlot = document.getElementById('timeSlot').value;
+    
+        if (customerName && customerAddress && timeSlot) {
+            timeslots.push({
+                customerName,
+                customerAddress,
+                timeSlot
+            });
+    
+            const timeslotTable = document.getElementById('timeslotTable').getElementsByTagName('tbody')[0];
+            const newRow = timeslotTable.insertRow();
+            newRow.insertCell(0).innerText = timeslots.length + 1000;
+            newRow.insertCell(1).innerText = customerName;
+            newRow.insertCell(2).innerText = customerAddress;
+            newRow.insertCell(3).innerText = timeSlot;
+            newRow.insertCell(4).innerHTML = `<button onclick="showMap('${customerAddress}')">Show Map</button>`;
+        } else {
+            const message = document.getElementById('message');
+            message.textContent = 'Please fill out all fields';
+            message.style.display = 'block';
+        }
+    }
+
+    function showMap(address) {
+        // You can implement map functionality here using Google Maps API or any other mapping service
+        // For demonstration purposes, this function simply alerts the address
+        alert(`Showing map for address: ${address}`);
+    }
+
+    function registerCustomer(event) {
+        event.preventDefault();
+
+        const firstName = document.getElementById('first').value;
+        const lastName = document.getElementById('last').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const repassword = document.getElementById('repassword').value;
+        const mobile = document.getElementById('mobile').value;
+        const gender = document.getElementById('gender').value;
+        const address = document.getElementById('address').value;
+
+        if (password !== repassword) {
+            alert("Passwords do not match");
+            return;
+        }
+
+        const newCustomer = {
+            name: `${firstName} ${lastName}`,
+            address: address,
+            email: email,
+            mobile: mobile,
+            gender: gender
+        };
+
+        // Add new customer to the customers array
+        customers.push(newCustomer);
+
+        // Add new customer to the table
+        const customerTable = document.getElementById('customerTable').getElementsByTagName('tbody')[0];
+        const newRow = customerTable.insertRow();
+        newRow.insertCell(0).innerText = `${firstName} ${lastName}`;
+        newRow.insertCell(1).innerText = address;
+
+        // Clear form fields
+        document.getElementById('first').value = '';
+        document.getElementById('last').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
+        document.getElementById('repassword').value = '';
+        document.getElementById('mobile').value = '';
+        document.getElementById('gender').value = '';
+        document.getElementById('address').value = '';
+
+        alert('Customer added successfully!');
+    }
+
+    window.onload = () => {
+        const customerTable = document.getElementById('customerTable').getElementsByTagName('tbody')[0];
+        customers.forEach(customer => {
+            const newRow = customerTable.insertRow();
+            newRow.insertCell(0).innerText = customer.name;
+            newRow.insertCell(1).innerText = customer.address;
+        });
+    };
+</script>
+
+</body>
+</html>

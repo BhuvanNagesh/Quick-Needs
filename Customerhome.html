@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-icon {
+            font-size: 24px;
+            margin-right: 20px;
+        }
+        .cart-container {
+            position: relative;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+        .cart-icon {
+            font-size: 24px;
+        }
+        .cart-hover {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: 0;
+            width: 200px;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .cart-container:hover .cart-hover {
+            display: block;
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+        .search-box {
+            width: 60%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .search-button, .mic-button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        .mic-button {
+            background-color: #007bff;
+        }
+        .micbutton {
+            background-color: orange;
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+        .menu-container {
+            position: relative;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+        .menu-icon {
+            font-size: 24px;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            right: 0;
+            width: 200px;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .dropdown-menu a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+        }
+        .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+        }
+        .items-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .item-card {
+            width: 150px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .item-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .item-name {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+        .item-price {
+            font-size: 14px;
+            color: #777;
+        }
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .quantity-button {
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin: 0 5px;
+        }
+        .quantity-display {
+            font-size: 14px;
+            color: #333;
+            margin: 0 10px;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .cart-item span {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="cart-container">
+            <div class="navbar-icon">🛒</div>
+            <div class="cart-hover">
+                <div id="cartItems">
+                    <p>Your cart is empty</p>
+                </div>
+            </div>
+        </div>
+        <div class="search-container">
+            <input type="text" class="search-box" id="searchInput" placeholder="Search for groceries...">
+            <button class="search-button" onclick="searchGroceries()">Search</button>
+            <button class="mic-button" onclick="startRecognition()">🎤</button>
+            <form action="action_page.php">
+                <button class="micbutton">Take In</button>
+            </form>
+            <form action="action_page.php">
+                <button class="micbutton">Delivery</button>
+            </form>
+        </div>
+        <div class="menu-container">
+            <div class="menu-icon" onclick="toggleDropdown()">☰</div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="Accountdetails.html">Account Details</a>
+                <a href="PaymentDetails.html">Payment Details</a>
+                <a href="OrderHistory.html">Order History</a>
+                <a href="Wishlist.html">Wishlist</a>
+                <a href="Customercare.html">Customer Care</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="items-container" id="itemsContainer">
+        <div class="item-card" data-name="Apple" data-price="1.00">
+            <img src="https://via.placeholder.com/150" alt="Apple">
+            <div class="item-name">Apple</div>
+            <div class="item-price">$1.00</div>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="decrementQuantity('Apple')">-</button>
+                <span class="quantity-display" id="Apple-quantity">0</span>
+                <button class="quantity-button" onclick="incrementQuantity('Apple')">+</button>
+            </div>
+        </div>
+        <div class="item-card" data-name="Banana" data-price="0.50">
+            <img src="https://via.placeholder.com/150" alt="Banana">
+            <div class="item-name">Banana</div>
+            <div class="item-price">$0.50</div>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="decrementQuantity('Banana')">-</button>
+                <span class="quantity-display" id="Banana-quantity">0</span>
+                <button class="quantity-button" onclick="incrementQuantity('Banana')">+</button>
+            </div>
+        </div>
+        <div class="item-card" data-name="Orange" data-price="0.75">
+            <img src="https://via.placeholder.com/150" alt="Orange">
+            <div class="item-name">Orange</div>
+            <div class="item-price">$0.75</div>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="decrementQuantity('Orange')">-</button>
+                <span class="quantity-display" id="Orange-quantity">0</span>
+                <button class="quantity-button" onclick="incrementQuantity('Orange')">+</button>
+            </div>
+        </div>
+        <div class="item-card" data-name="Grapes" data-price="2.00">
+            <img src="https://via.placeholder.com/150" alt="Grapes">
+            <div class="item-name">Grapes</div>
+            <div class="item-price">$2.00</div>
+            <div class="quantity-controls">
+                <button class="quantity-button" onclick="decrementQuantity('Grapes')">-</button>
+                <span class="quantity-display" id="Grapes-quantity">0</span>
+                <button class="quantity-button" onclick="incrementQuantity('Grapes')">+</button>
+            </div>
+        </div>
+        <!-- Add more items here similarly -->
+    </div>
+
+    <script>
+        const cart = [];
+
+        function incrementQuantity(itemName) {
+            const itemElement = document.querySelector(`.item-card[data-name="${itemName}"]`);
+            const quantityDisplay = document.getElementById(`${itemName}-quantity`);
+            const itemPrice = parseFloat(itemElement.getAttribute('data-price'));
+            const cartItemIndex = cart.findIndex(item => item.name === itemName);
+
+            if (cartItemIndex === -1) {
+                cart.push({ name: itemName, price: itemPrice, quantity: 1 });
+            } else {
+                cart[cartItemIndex].quantity += 1;
+            }
+
+            quantityDisplay.textContent = cart.find(item => item.name === itemName).quantity;
+            updateCartDisplay();
+        }
+
+        function decrementQuantity(itemName) {
+            const itemElement = document.querySelector(`.item-card[data-name="${itemName}"]`);
+            const quantityDisplay = document.getElementById(`${itemName}-quantity`);
+            const cartItemIndex = cart.findIndex(item => item.name === itemName);
+
+            if (cartItemIndex !== -1) {
+                if (cart[cartItemIndex].quantity > 1) {
+                    cart[cartItemIndex].quantity -= 1;
+                } else {
+                    cart.splice(cartItemIndex, 1);
+                }
+            }
+
+            quantityDisplay.textContent = cart.find(item => item.name === itemName)?.quantity || 0;
+            updateCartDisplay();
+        }
+
+        function updateCartDisplay() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            cartItemsContainer.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p>Your cart is empty</p>';
+                return;
+            }
+
+            cart.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.classList.add('cart-item');
+                cartItem.innerHTML = `
+                    <span>${item.name} ($${item.price}) x ${item.quantity}</span>
+                    <button class="quantity-button" onclick="decrementQuantity('${item.name}')">-</button>
+                    <button class="quantity-button" onclick="incrementQuantity('${item.name}')">+</button>
+                `;
+                cartItemsContainer.appendChild(cartItem);
+            });
+        }
+
+        function searchGroceries() {
+            const query = document.getElementById('searchInput').value;
+            if (query) {
+                console.log('Searching for:', query);
+                // Perform the search logic here, e.g., making an API call
+            }
+        }
+
+        function startRecognition() {
+            if (!('webkitSpeechRecognition' in window)) {
+                alert('Your browser does not support speech recognition. Please use Chrome.');
+                return;
+            }
+
+            const recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onstart = () => {
+                console.log('Voice recognition started. Speak into the microphone.');
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('searchInput').value = transcript;
+                searchGroceries();
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+            };
+
+            recognition.onend = () => {
+                console.log('Voice recognition ended.');
+            };
+
+            recognition.start();
+        }
+
+        function toggleDropdown() {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            if (dropdownMenu.style.display === 'block') {
+                dropdownMenu.style.display = 'none';
+            } else {
+                dropdownMenu.style.display = 'block';
+            }
+        }
+
+        window.onclick = (event) => {
+            if (!event.target.matches('.menu-icon')) {
+                const dropdowns = document.getElementsByClassName('dropdown-menu');
+                for (let i = 0; i < dropdowns.length; i++) {
+                    const openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === 'block') {
+                        openDropdown.style.display = 'none';
+                    }
+                }
+            }
+        };
+    </script>
+    <script>
+        function calculateTotalCost() {
+            let totalCost = 0;
+            cart.forEach(item => {
+                totalCost += item.price * item.quantity;
+            });
+            return totalCost.toFixed(2); // Round to 2 decimal places for currency
+        }
+        
+        function updateCartDisplay() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const totalCostContainer = document.createElement('div');
+            totalCostContainer.innerHTML = `<p>Total: $${calculateTotalCost()}</p>`;
+            cartItemsContainer.innerHTML = '';
+        
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p>Your cart is empty</p>';
+                return;
+            }
+        
+            cart.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.classList.add('cart-item');
+                cartItem.innerHTML = `
+                    <span>${item.name} ($${item.price}) x ${item.quantity}</span>
+                    <button class="quantity-button" onclick="decrementQuantity('${item.name}')">-</button>
+                    <button class="quantity-button" onclick="incrementQuantity('${item.name}')">+</button>
+                `;
+                cartItemsContainer.appendChild(cartItem);
+            });
+        
+            cartItemsContainer.appendChild(totalCostContainer);
+        
+            const makePaymentButton = document.createElement('button');
+            makePaymentButton.textContent = 'Make Payment';
+            makePaymentButton.addEventListener('click', () => {
+                // Navigate to the payment page with vendor QR details
+                window.location.href = 'Vendorpaymentdetails.html'; // Replace 'payment_page.html' with your actual page URL
+            });
+            cartItemsContainer.appendChild(makePaymentButton);
+        }
+    </script>
+</body>
+</html>

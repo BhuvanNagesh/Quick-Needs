@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .profile-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .profile-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+        .profile-details {
+            margin-bottom: 20px;
+        }
+        .map-icon {
+            font-size: 24px;
+            cursor: pointer;
+            color: blue;
+        }
+        .form-group{
+            width: auto;
+            border:5px;
+            border-radius: 15px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <img src="default-profile.png" alt="Vendor Photo" class="profile-photo">
+        <div class="profile-details">
+            <h2>Vendor Name</h2>
+            <p>Address: Shop Address</p>
+            <p>Phone Number: Vendor Phone Number</p>
+        </div>
+        <form action="Vendordetailsedit.html">
+            <div>
+                <button class="form-group">Edit Profile</button>
+            </div>
+        </form>
+    </div>
+    <div id="map" style="height: 300px; width: 100%;">
+        <!-- Map will be displayed here -->
+    </div>
+    <script>
+        // Initialize and display the map
+        function initMap() {
+            // Define customer location
+            var customerLocation = { lat: 40.7128, lng: -74.0060 }; // Example coordinates (New York)
+
+            // Create a map centered at the customer location
+            var map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 12,
+                center: customerLocation,
+            });
+
+            // Add a marker at the customer location
+            var marker = new google.maps.Marker({
+                position: customerLocation,
+                map: map,
+                title: "Customer Location",
+            });
+        }
+    </script>
+    <!-- Load the Google Maps API with your API key -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjdOklcLXZ5tSXQIJkvDAjA0KAEoLPVHI&callback=initMap" async defer></script>
+</body>
+</html>

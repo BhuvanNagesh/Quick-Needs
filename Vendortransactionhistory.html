@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        .total {
+            text-align: right;
+            margin-top: 20px;
+        }
+        .options {
+            margin-top: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Transaction History</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Order Name</th>
+            <th>Customer Name</th>
+            <th>Date</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Order #1</td>
+            <td>Customer A</td>
+            <td>2024-05-01</td>
+            <td>$100</td>
+        </tr>
+        <tr>
+            <td>Order #2</td>
+            <td>Customer B</td>
+            <td>2024-05-02</td>
+            <td>$150</td>
+        </tr>
+        <!-- Add more rows as needed -->
+        <!-- Example: -->
+        <tr>
+            <td>Order #3</td>
+            <td>Customer C</td>
+            <td>2024-05-03</td>
+            <td>$120</td>
+        </tr>
+        <!-- Add more orders here -->
+    </tbody>
+</table>
+
+<div class="total">
+    Total Income: $2370
+</div>
+
+<div class="options">
+    <button class="button" onclick="showTotalIncome('day')">Total Income Per Day</button>
+    <button class="button" onclick="showTotalIncome('month')">Total Income Per Month</button>
+    <button class="button" onclick="showTotalIncome('six-month')">Total Income Per 6 Months</button>
+    <button class="button" onclick="showTotalIncome('year')">Total Income Per Year</button>
+</div>
+
+<script>
+    function showTotalIncome(option) {
+        let totalIncome = 0;
+        const currentDate = new Date();
+
+        const table = document.querySelector('table');
+        const rows = table.querySelectorAll('tbody tr');
+
+        rows.forEach(row => {
+            const amount = parseFloat(row.cells[3].textContent.slice(1));
+            const orderDate = new Date(row.cells[2].textContent);
+
+            if (option === 'day' && 
+                orderDate.getDate() === currentDate.getDate() &&
+                orderDate.getMonth() === currentDate.getMonth() &&
+                orderDate.getFullYear() === currentDate.getFullYear()) {
+                totalIncome += amount;
+            } else if (option === 'month' && 
+                orderDate.getMonth() === currentDate.getMonth() &&
+                orderDate.getFullYear() === currentDate.getFullYear()) {
+                totalIncome += amount;
+            } else if (option === 'six-month') {
+                const sixMonthsAgo = new Date(currentDate);
+                sixMonthsAgo.setMonth(currentDate.getMonth() - 6);
+                if (orderDate >= sixMonthsAgo && orderDate <= currentDate) {
+                    totalIncome += amount;
+                }
+            } else if (option === 'year' && orderDate.getFullYear() === currentDate.getFullYear()) {
+                totalIncome += amount;
+            }
+        });
+
+        alert(`Total Income Per ${option.charAt(0).toUpperCase() + option.slice(1)}: $${totalIncome.toFixed(2)}`);
+    }
+</script>
+
+</body>
+</html>
